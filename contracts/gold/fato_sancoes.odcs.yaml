@@ -1,0 +1,98 @@
+apiVersion: v3.1.0
+kind: DataContract
+id: urn:fornecedor360:gold:fato_sancoes
+name: fato_sancoes
+version: 1.0.0
+status: active
+
+description:
+  purpose: >
+    Fact table for supplier sanctions.
+    Grain: one row per sanction record per supplier.
+    Sources: CEIS and CNEP (Portal da Transparência).
+
+team:
+  name: fornecedor360-team
+
+servers:
+  - server: local
+    type: local
+    format: parquet
+    path: data/gold/fato_sancoes.parquet
+
+schema:
+  - name: fato_sancoes
+    description: Supplier sanctions fact table
+    properties:
+      - name: sancao_sk
+        logicalType: string
+        physicalType: varchar
+        description: Surrogate key for the sanction record
+      - name: supplier_sk
+        logicalType: string
+        physicalType: varchar
+        description: Foreign key to dim_fornecedor
+      - name: date_id
+        logicalType: integer
+        physicalType: integer
+        description: Foreign key to dim_tempo in YYYYMMDD format
+      - name: cnpj_normalized
+        logicalType: string
+        physicalType: varchar
+      - name: sancao_id
+        logicalType: string
+        physicalType: varchar
+        description: Natural key from the source system
+      - name: fonte
+        logicalType: string
+        physicalType: varchar
+        description: Data source — ceis or cnep
+      - name: _join_type
+        logicalType: string
+        physicalType: varchar
+        description: Dimension join result
+      - name: tipo_sancao
+        logicalType: string
+        physicalType: varchar
+      - name: tipo_sancao_detalhe
+        logicalType: string
+        physicalType: varchar
+      - name: orgao_sancionador_nome
+        logicalType: string
+        physicalType: varchar
+      - name: orgao_sancionador_uf
+        logicalType: string
+        physicalType: varchar
+        description: NULL for federal sanctioning bodies (national scope)
+      - name: orgao_sancionador_esfera
+        logicalType: string
+        physicalType: varchar
+      - name: orgao_sancionador_poder
+        logicalType: string
+        physicalType: varchar
+      - name: numero_processo
+        logicalType: string
+        physicalType: varchar
+      - name: data_inicio_sancao
+        logicalType: date
+        physicalType: date
+      - name: data_fim_sancao
+        logicalType: date
+        physicalType: date
+      - name: data_publicacao_sancao
+        logicalType: date
+        physicalType: date
+      - name: data_transitado_julgado
+        logicalType: date
+        physicalType: date
+      - name: is_ativa
+        logicalType: boolean
+        physicalType: boolean
+        description: True if sanction has no end date or end date is in the future
+      - name: valor_multa
+        logicalType: number
+        physicalType: decimal(15,2)
+      - name: _loaded_at
+        logicalType: timestamp
+        physicalType: timestamp_tz
+        description: Pipeline load timestamp (UTC)

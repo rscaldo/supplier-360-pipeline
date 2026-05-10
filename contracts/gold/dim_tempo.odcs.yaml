@@ -1,0 +1,73 @@
+apiVersion: v3.1.0
+kind: DataContract
+id: urn:fornecedor360:gold:dim_tempo
+name: dim_tempo
+version: 1.0.0
+status: active
+
+description:
+  purpose: >
+    Date dimension for the Fornecedor 360 star schema.
+    Covers the full date range of procurement contracts and sanctions data.
+    Used as the time axis for all fact tables.
+
+team:
+  name: fornecedor360-team
+
+servers:
+  - server: local
+    type: local
+    format: parquet
+    path: data/gold/dim_tempo.parquet
+
+schema:
+  - name: dim_tempo
+    description: Date dimension table
+    properties:
+      - name: date_id
+        logicalType: integer
+        physicalType: integer
+        description: Surrogate key in YYYYMMDD integer format
+      - name: full_date
+        logicalType: timestamp
+        physicalType: timestamp_tz
+      - name: year
+        logicalType: number
+        physicalType: bigint
+      - name: quarter
+        logicalType: number
+        physicalType: bigint
+      - name: quarter_label
+        logicalType: string
+        physicalType: varchar
+      - name: month
+        logicalType: number
+        physicalType: bigint
+      - name: month_name
+        logicalType: string
+        physicalType: varchar
+      - name: month_label
+        logicalType: string
+        physicalType: varchar
+      - name: day_of_week
+        logicalType: number
+        physicalType: bigint
+      - name: day_name
+        logicalType: string
+        physicalType: varchar
+      - name: week_of_year
+        logicalType: number
+        physicalType: bigint
+      - name: is_weekend
+        logicalType: boolean
+        physicalType: boolean
+      - name: is_weekday
+        logicalType: boolean
+        physicalType: boolean
+      - name: fiscal_year
+        logicalType: number
+        physicalType: bigint
+      - name: _loaded_at
+        logicalType: timestamp
+        physicalType: timestamp_tz
+        description: Pipeline load timestamp (UTC)

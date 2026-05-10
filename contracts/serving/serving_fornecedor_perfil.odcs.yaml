@@ -1,0 +1,106 @@
+apiVersion: v3.1.0
+kind: DataContract
+id: urn:fornecedor360:serving:serving_fornecedor_perfil
+name: serving_fornecedor_perfil
+version: 1.0.0
+status: active
+
+description:
+  purpose: >
+    Supplier profile view for dashboard lookups.
+    One row per supplier (current version only).
+    CNPJ is pseudonymized via HMAC-SHA256 (ADR-005, LGPD compliance).
+    Consumer: analytical dashboards and supplier lookup APIs.
+
+team:
+  name: fornecedor360-team
+
+servers:
+  - server: local
+    type: local
+    format: parquet
+    path: data/serving/serving_fornecedor_perfil.parquet
+
+schema:
+  - name: serving_fornecedor_perfil
+    description: Supplier 360 profile — dashboard-ready, LGPD-compliant
+    properties:
+      - name: cnpj_token
+        logicalType: string
+        physicalType: varchar
+        description: HMAC-SHA256 pseudonymized CNPJ — replaces raw CNPJ (ADR-005)
+      - name: supplier_sk
+        logicalType: string
+        physicalType: varchar
+        description: Foreign key to dim_fornecedor
+      - name: razao_social
+        logicalType: string
+        physicalType: varchar
+      - name: porte
+        logicalType: string
+        physicalType: varchar
+      - name: situacao_cadastral
+        logicalType: string
+        physicalType: varchar
+      - name: natureza_juridica_desc
+        logicalType: string
+        physicalType: varchar
+      - name: uf
+        logicalType: string
+        physicalType: varchar
+      - name: municipio_desc
+        logicalType: string
+        physicalType: varchar
+      - name: tem_sancao
+        logicalType: boolean
+        physicalType: boolean
+      - name: scd2_valid_from
+        logicalType: date
+        physicalType: date
+        description: Start date of the current supplier record version
+      - name: total_contratos
+        logicalType: number
+        physicalType: bigint
+      - name: valor_total_contratos
+        logicalType: number
+        physicalType: decimal(38,2)
+      - name: valor_medio_contrato
+        logicalType: number
+        physicalType: double
+      - name: maior_contrato
+        logicalType: number
+        physicalType: decimal(15,2)
+      - name: menor_contrato
+        logicalType: number
+        physicalType: decimal(15,2)
+      - name: primeiro_contrato
+        logicalType: date
+        physicalType: date
+      - name: ultimo_contrato
+        logicalType: date
+        physicalType: date
+      - name: orgaos_distintos
+        logicalType: number
+        physicalType: bigint
+      - name: contratos_valor_negativo
+        logicalType: number
+        physicalType: double
+      - name: total_sancoes
+        logicalType: number
+        physicalType: bigint
+      - name: total_sancoes_ativas
+        logicalType: number
+        physicalType: double
+      - name: valor_total_multas
+        logicalType: number
+        physicalType: decimal(38,2)
+      - name: ultima_sancao
+        logicalType: date
+        physicalType: date
+      - name: orgaos_sancionadores_distintos
+        logicalType: number
+        physicalType: bigint
+      - name: _loaded_at
+        logicalType: timestamp
+        physicalType: timestamp_tz
+        description: Pipeline load timestamp (UTC)

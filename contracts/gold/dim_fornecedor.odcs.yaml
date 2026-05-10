@@ -1,0 +1,76 @@
+apiVersion: v3.1.0
+kind: DataContract
+id: urn:fornecedor360:gold:dim_fornecedor
+name: dim_fornecedor
+version: 1.0.0
+status: active
+
+description:
+  purpose: >
+    Supplier dimension table using SCD Type 2.
+    Tracks historical changes in supplier attributes over time.
+    Join with fact tables using supplier_sk + date range (valid_from/valid_to),
+    never with is_current = true alone (ADR-003).
+
+team:
+  name: fornecedor360-team
+
+servers:
+  - server: local
+    type: local
+    format: parquet
+    path: data/gold/dim_fornecedor.parquet
+
+schema:
+  - name: dim_fornecedor
+    description: Supplier dimension with SCD Type 2 historization
+    properties:
+      - name: supplier_sk
+        logicalType: string
+        physicalType: varchar
+        description: Surrogate key — MD5 hash of cnpj_normalized + valid_from
+      - name: cnpj_normalized
+        logicalType: string
+        physicalType: varchar
+        description: Normalized CNPJ — digits only, zero-padded to 14 chars (ADR-002)
+      - name: razao_social
+        logicalType: string
+        physicalType: varchar
+      - name: porte
+        logicalType: string
+        physicalType: varchar
+      - name: situacao_cadastral
+        logicalType: string
+        physicalType: varchar
+      - name: natureza_juridica_desc
+        logicalType: string
+        physicalType: varchar
+      - name: uf
+        logicalType: string
+        physicalType: varchar
+      - name: municipio_desc
+        logicalType: string
+        physicalType: varchar
+      - name: tem_sancao
+        logicalType: boolean
+        physicalType: boolean
+      - name: _attr_hash
+        logicalType: string
+        physicalType: varchar
+        description: MD5 hash of SCD2-tracked attributes for change detection (ADR-004)
+      - name: valid_from
+        logicalType: date
+        physicalType: date
+        description: Start date of this supplier record version
+      - name: valid_to
+        logicalType: date
+        physicalType: date
+        description: End date of this supplier record version — null means current
+      - name: is_current
+        logicalType: boolean
+        physicalType: boolean
+        description: True if this is the current active record
+      - name: _loaded_at
+        logicalType: timestamp
+        physicalType: timestamp_tz
+        description: Pipeline load timestamp (UTC)

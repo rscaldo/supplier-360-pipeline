@@ -1,0 +1,98 @@
+apiVersion: v3.1.0
+kind: DataContract
+id: urn:fornecedor360:gold:fato_contratos
+name: fato_contratos
+version: 1.0.0
+status: active
+
+description:
+  purpose: >
+    Fact table for procurement contracts.
+    Grain: one row per contract per managing unit (codigo_unidade_gestora).
+    Sources: Compras.gov and PNCP. Join with dim_fornecedor using supplier_sk
+    and date range — never with is_current = true alone (ADR-003).
+
+team:
+  name: fornecedor360-team
+
+servers:
+  - server: local
+    type: local
+    format: parquet
+    path: data/gold/fato_contratos.parquet
+
+schema:
+  - name: fato_contratos
+    description: Procurement contracts fact table
+    properties:
+      - name: contrato_sk
+        logicalType: string
+        physicalType: varchar
+        description: Surrogate key for the contract
+      - name: supplier_sk
+        logicalType: string
+        physicalType: varchar
+        description: Foreign key to dim_fornecedor
+      - name: date_id
+        logicalType: integer
+        physicalType: integer
+        description: Foreign key to dim_tempo in YYYYMMDD format
+      - name: cnpj_fornecedor
+        logicalType: string
+        physicalType: varchar
+      - name: cnpj_comprador
+        logicalType: string
+        physicalType: varchar
+      - name: codigo_orgao
+        logicalType: string
+        physicalType: varchar
+      - name: nome_comprador
+        logicalType: string
+        physicalType: varchar
+      - name: codigo_unidade_gestora
+        logicalType: string
+        physicalType: varchar
+        description: Managing unit code — part of the contract grain
+      - name: nome_unidade_gestora
+        logicalType: string
+        physicalType: varchar
+      - name: nome_fornecedor
+        logicalType: string
+        physicalType: varchar
+      - name: numero_contrato
+        logicalType: string
+        physicalType: varchar
+      - name: numero_compra
+        logicalType: string
+        physicalType: varchar
+      - name: objeto_contrato
+        logicalType: string
+        physicalType: varchar
+      - name: fonte
+        logicalType: string
+        physicalType: varchar
+        description: Data source — compras or pncp
+      - name: _join_type
+        logicalType: string
+        physicalType: varchar
+        description: Dimension join result — matched, unmatched_supplier, or no_dim
+      - name: valor_inicial
+        logicalType: number
+        physicalType: decimal(15,2)
+      - name: data_referencia
+        logicalType: date
+        physicalType: date
+      - name: data_vigencia_inicial
+        logicalType: date
+        physicalType: date
+      - name: data_vigencia_final
+        logicalType: date
+        physicalType: date
+      - name: _valor_negativo
+        logicalType: boolean
+        physicalType: boolean
+        description: Flag for contracts with negative initial value
+      - name: _loaded_at
+        logicalType: timestamp
+        physicalType: timestamp_tz
+        description: Pipeline load timestamp (UTC)

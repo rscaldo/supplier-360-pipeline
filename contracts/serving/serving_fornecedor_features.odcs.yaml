@@ -1,0 +1,95 @@
+apiVersion: v3.1.0
+kind: DataContract
+id: urn:fornecedor360:serving:serving_fornecedor_features
+name: serving_fornecedor_features
+version: 1.0.0
+status: active
+
+description:
+  purpose: >
+    Flat feature table for ML classification.
+    One row per supplier with numeric and categorical features.
+    Consumer: H2O Driverless AI (ADR-008).
+    No CNPJ exposed — identified only by supplier_sk.
+
+team:
+  name: fornecedor360-team
+
+servers:
+  - server: local
+    type: local
+    format: parquet
+    path: data/serving/serving_fornecedor_features.parquet
+
+schema:
+  - name: serving_fornecedor_features
+    description: Supplier feature set for ML risk classification
+    properties:
+      - name: supplier_sk
+        logicalType: string
+        physicalType: varchar
+        description: Supplier identifier — foreign key to dim_fornecedor
+      - name: porte
+        logicalType: string
+        physicalType: varchar
+      - name: natureza_juridica_desc
+        logicalType: string
+        physicalType: varchar
+      - name: uf
+        logicalType: string
+        physicalType: varchar
+      - name: situacao_cadastral
+        logicalType: string
+        physicalType: varchar
+      - name: qtd_contratos
+        logicalType: number
+        physicalType: bigint
+      - name: qtd_orgaos_distintos
+        logicalType: number
+        physicalType: bigint
+      - name: valor_total_contratos
+        logicalType: number
+        physicalType: decimal(38,2)
+      - name: valor_medio_contrato
+        logicalType: number
+        physicalType: double
+      - name: valor_max_contrato
+        logicalType: number
+        physicalType: decimal(15,2)
+      - name: anos_ativo_contratos
+        logicalType: number
+        physicalType: bigint
+      - name: tem_contrato_pncp
+        logicalType: integer
+        physicalType: integer
+        description: Binary flag — 1 if supplier has PNCP contracts
+      - name: tem_contrato_compras
+        logicalType: integer
+        physicalType: integer
+        description: Binary flag — 1 if supplier has Compras.gov contracts
+      - name: tem_sancao
+        logicalType: integer
+        physicalType: integer
+        description: Binary flag — 1 if supplier has any sanction
+      - name: qtd_sancoes
+        logicalType: number
+        physicalType: bigint
+      - name: tem_ceis
+        logicalType: integer
+        physicalType: integer
+        description: Binary flag — 1 if supplier appears in CEIS
+      - name: tem_cnep
+        logicalType: integer
+        physicalType: integer
+        description: Binary flag — 1 if supplier appears in CNEP
+      - name: sancao_ativa
+        logicalType: integer
+        physicalType: integer
+        description: Binary flag — 1 if supplier has an active sanction
+      - name: valor_total_multa
+        logicalType: number
+        physicalType: decimal(38,2)
+      - name: _loaded_at
+        logicalType: timestamp
+        physicalType: timestamp_tz
+        description: Pipeline load timestamp (UTC)

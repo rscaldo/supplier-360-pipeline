@@ -1,0 +1,54 @@
+# Environment
+.env
+local/.env
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Data — never commit raw or processed data
+data/
+
+# DuckDB — generated at runtime
+db/
+*.duckdb
+
+# Temporary files
+test_init.yaml
+describe_schemas.py
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+
+# Terraform sensitive values
+infra/terraform.tfvars
+terraform.tfstate
+terraform.tfstate.backup
+
+# Certificates and private keys
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Additional database formats
+*.db
+*.sqlite
+
+# Logs
+*.log
+
+# Credential directories
+secrets/
+credentials/
+
+# Progress / dev notes — never commit to public repo
+docs/projeto
+
+.claude/
+claude/
